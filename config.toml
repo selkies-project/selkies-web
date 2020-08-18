@@ -1,5 +1,5 @@
-baseURL = "https://selkies-project.github.io/selkies-web/"
-title = "Goldydocs"
+baseURL = "https://selkies.io/"
+title = "Selkies"
 
 enableRobotsTXT = true
 
