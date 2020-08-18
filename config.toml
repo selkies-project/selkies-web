@@ -1,4 +1,4 @@
-baseURL = "/"
+baseURL = "https://selkies-project.github.io/selkies-web/"
 title = "Goldydocs"
 
 enableRobotsTXT = true
