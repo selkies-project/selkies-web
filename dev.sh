@@ -16,4 +16,4 @@
 [[ ! -d node_modules ]] && npm install
 [[ -z "$(command -v postcss)" ]] && npm install -g postcss-cli
 
-hugo server -p 8080 --bind 0.0.0.0
+hugo server --port 3000 --bind 0.0.0.0
