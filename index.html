@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selkies | Linux desktops and applications in any web browser</title>
+    <meta name="description" content="Selkies is the open-source, GPU-accelerated platform that streams Linux X11 and Wayland desktops and applications to any web browser at 60+ FPS. WebSockets or WebRTC, damage-aware hybrid streaming, webcam, microphone, gamepads, dual monitors and more. Free forever.">
+    <meta name="author" content="The Selkies Project">
+    <meta name="keywords" content="Selkies, remote desktop, Linux, web browser, WebRTC, WebSockets, WebCodecs, H.264, NVENC, VA-API, Wayland, X11, VDI, remote browser isolation, cloud gaming, Docker, Kubernetes, noVNC alternative, Guacamole alternative, LinuxServer.io, pixelflux, pcmflux, Sealskin">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://selkies.io/">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://selkies.io/">
+    <meta property="og:title" content="Selkies | A Linux desktop in the browser that feels like a local monitor">
+    <meta property="og:description" content="Open-source, GPU-accelerated streaming of Linux desktops and applications to any web browser. 60+ FPS over WebRTC or WebSockets, zero client installs, free forever.">
+    <meta property="og:image" content="https://selkies.io/img/icon-512.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Selkies | Linux desktops in any web browser">
+    <meta name="twitter:description" content="Open-source, GPU-accelerated streaming of Linux desktops and applications to any web browser at 60+ FPS.">
+    <meta name="twitter:image" content="https://selkies.io/img/icon-512.png">
+    <meta name="theme-color" content="#07090f">
+    <link rel="icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="img/icon-512.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Selkies",
+      "url": "https://selkies.io/",
+      "operatingSystem": "Linux",
+      "applicationCategory": "UtilitiesApplication",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "license": "https://www.mozilla.org/en-US/MPL/2.0/",
+      "description": "Open-source low-latency GPU-accelerated HTML5 remote desktop streaming platform for Linux X11 and Wayland, for self-hosting, containers, Kubernetes, or Cloud/HPC.",
+      "softwareRequirements": "Linux, a modern web browser",
+      "downloadUrl": "https://github.com/selkies-project/selkies/releases",
+      "author": {
+        "@type": "Organization",
+        "name": "The Selkies Project",
+        "url": "https://github.com/selkies-project",
+        "sameAs": ["https://discord.gg/wDNGDeSW5F", "https://github.com/selkies-project/selkies"]
+      },
+      "featureList": "WebRTC and WebSockets transports, NVENC and VA-API hardware encoding, zero-copy Wayland capture, damage-aware hybrid streaming, webcam and microphone forwarding, gamepad and touch gamepad input, dual monitors, binary clipboard, file transfers, session sharing"
+    }
+    </script>
+</head>
+<body>
+
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+    <header class="site-header" id="siteHeader">
+        <div class="container nav-flex">
+            <a href="#top" class="logo" aria-label="Selkies home">
+                <img src="img/selkies.svg" alt="" width="36" height="36">
+                <span class="logo-word">Selkies</span>
+            </a>
+            <nav class="nav-links" id="navLinks" aria-label="Primary">
+                <a href="#hybrid">How it works</a>
+                <a href="#features">Features</a>
+                <a href="#pipeline">Pipeline</a>
+                <a href="#ecosystem">Ecosystem</a>
+                <a href="#start">Get started</a>
+                <a href="https://docs.selkies.io/" target="_blank" rel="noopener noreferrer">Docs</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="https://discord.gg/wDNGDeSW5F" target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="Discord">
+                    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.4a18 18 0 0 1 4.4 2.2 15.5 15.5 0 0 0-15.2 0A18 18 0 0 1 8.8 3.4L8.6 3a19.8 19.8 0 0 0-4.9 1.4C.6 9.1-.2 13.6.2 18.1A20 20 0 0 0 6.2 21l1.3-2.1a12.5 12.5 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12 0l.5.4a12.5 12.5 0 0 1-2 1l1.3 2.1a20 20 0 0 0 6-2.9c.5-5.2-.8-9.7-3.5-13.7ZM8.5 15.4c-1.2 0-2.1-1.1-2.1-2.4s1-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Zm7 0c-1.2 0-2.1-1.1-2.1-2.4s1-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Z"/></svg>
+                </a>
+                <a href="https://github.com/selkies-project/selkies" target="_blank" rel="noopener noreferrer" class="icon-btn" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+                </a>
+                <a href="#start" class="btn btn-primary btn-sm nav-cta">Get started</a>
+                <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="top">
+
+    <!-- ================================================================ HERO -->
+    <section class="hero" id="hero">
+        <div class="hero-bg" aria-hidden="true">
+            <div class="aurora aurora-1"></div>
+            <div class="aurora aurora-2"></div>
+            <div class="aurora aurora-3"></div>
+            <div class="hero-grid"></div>
+            <div class="hero-noise"></div>
+        </div>
+
+        <div class="container hero-inner">
+            <div class="hero-copy">
+                <a class="hero-badge reveal" href="https://github.com/selkies-project/selkies/releases" target="_blank" rel="noopener noreferrer">
+                    <span class="pulse-dot"></span>
+                    <span>Selkies 2.0 &middot; Rust pipeline, native Wayland, WebRTC and WebSockets</span>
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M9 6l6 6-6 6"/></svg>
+                </a>
+                <h1 class="hero-title" data-split>
+                    A Linux desktop in the browser that feels like a <em>local monitor.</em>
+                </h1>
+                <p class="hero-text reveal" style="--d:.35s">
+                    Selkies streams X11 and Wayland desktops and single applications to any web browser at 60+ frames per second.
+                    Over WebRTC or WebSockets, GPU-accelerated, damage-aware, and free forever. Not a screen-scraper.
+                    Not just a video stream. The best of both, built for the modern web.
+                </p>
+                <div class="hero-actions reveal" style="--d:.45s">
+                    <a href="#start" class="btn btn-primary btn-lg magnetic">
+                        Get started
+                        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                    <a href="https://docs.selkies.io/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg magnetic">Read the docs</a>
+                    <a href="https://discord.gg/wDNGDeSW5F" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-lg magnetic">Join Discord</a>
+                </div>
+                <ul class="hero-badges reveal" style="--d:.55s" aria-label="Compatibility">
+                    <li>Chromium</li><li>Firefox</li><li>Safari</li>
+                    <li class="sep" aria-hidden="true"></li>
+                    <li>X11</li><li>Wayland</li>
+                    <li class="sep" aria-hidden="true"></li>
+                    <li>NVIDIA</li><li>Intel</li><li>AMD</li>
+                </ul>
+            </div>
+
+            <div class="hero-visual reveal" style="--d:.3s">
+                <div class="browser-mock tilt" data-tilt-max="6">
+                    <div class="browser-chrome">
+                        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+                        <div class="browser-url">
+                            <svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M17 8h-1V6a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2Zm-7-2a2 2 0 0 1 4 0v2h-4V6Z"/></svg>
+                            <span>https://desktop.example.internal</span>
+                        </div>
+                    </div>
+                    <div class="browser-body">
+                        <canvas id="streamSim" width="960" height="600" aria-label="Animated simulation of Selkies encoding only the changed regions of a desktop"></canvas>
+                        <div class="sim-hud" id="simHud" aria-hidden="true">
+                            <div class="hud-row"><span class="hud-k">regions</span><span class="hud-v" id="hudStripes">0</span></div>
+                            <div class="hud-row"><span class="hud-k">state</span><span class="hud-v" id="hudState">idle</span></div>
+                            <div class="hud-row"><span class="hud-k">encoder</span><span class="hud-v">h264 &middot; nvenc</span></div>
+                            <div class="hud-bar"><span id="hudBar"></span></div>
+                        </div>
+                        <div class="sim-legend" aria-hidden="true">
+                            <span><i class="lg lg-motion"></i>changed region</span>
+                            <span><i class="lg lg-paint"></i>paint-over</span>
+                            <span><i class="lg lg-idle"></i>no frames sent</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual-glow" aria-hidden="true"></div>
+            </div>
+        </div>
+
+        <a href="#proof" class="scroll-cue" aria-label="Scroll down"><span></span></a>
+    </section>
+
+    <!-- =============================================================== PROOF -->
+    <section class="proof" id="proof">
+        <div class="container">
+            <ul class="stat-strip">
+                <li class="reveal"><strong><span data-count="60">0</span>+</strong><span>FPS at 1080p, even on a software encoder</span></li>
+                <li class="reveal" style="--d:.08s"><strong><span data-count="1">0</span></strong><span>TCP port, through any reverse proxy</span></li>
+                <li class="reveal" style="--d:.16s"><strong><span data-count="0">0</span></strong><span>client installs, plugins or agents</span></li>
+                <li class="reveal" style="--d:.24s"><strong><span data-count="2">0</span></strong><span>transports, WebRTC and WebSockets, swappable live</span></li>
+                <li class="reveal" style="--d:.32s"><strong>MPL&#8209;2.0</strong><span>open source, free forever</span></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ============================================================== HYBRID -->
+    <section class="section hybrid" id="hybrid">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="eyebrow">How it works</span>
+                <h2>Not a video stream. Not VNC. <span class="grad">Both, and better.</span></h2>
+                <p>
+                    Traditional remote desktops scrape rectangles with a thirty-year-old protocol. Cloud gaming pushes a full video
+                    stream whether anything changed or not. Selkies is a hybrid: it tracks damage like a VNC, encodes like a game
+                    stream, and knows when to do neither. The same intrinsics run on WebRTC and on WebSockets.
+                </p>
+            </div>
+
+            <div class="hybrid-grid">
+                <article class="hybrid-card reveal">
+                    <div class="hybrid-vis" aria-hidden="true">
+                        <div class="stripes" data-mode="damage">
+                            <div class="mover"></div>
+                            <div class="damage-box"></div>
+                        </div>
+                    </div>
+                    <h3>Damage tracking</h3>
+                    <p>Every frame is compared to the last and encoded only where something changed. A blinking cursor or a clock tick costs a sliver of bandwidth, not a full keyframe, and the encoder runs no faster than the screen actually moves.</p>
+                </article>
+                <article class="hybrid-card reveal" style="--d:.1s">
+                    <div class="hybrid-vis" aria-hidden="true">
+                        <div class="stripes" data-mode="idle">
+                            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                            <div class="idle-tag">0 B/s</div>
+                        </div>
+                    </div>
+                    <h3>No motion, no frames</h3>
+                    <p>A static screen costs nothing. Capture is damage-gated on both X11 and Wayland, and audio silence is detected and dropped before it is ever encoded.</p>
+                </article>
+                <article class="hybrid-card reveal" style="--d:.2s">
+                    <div class="hybrid-vis" aria-hidden="true">
+                        <div class="stripes" data-mode="paint">
+                            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                            <div class="paint-sweep"></div>
+                            <div class="paint-text">Aa</div>
+                        </div>
+                    </div>
+                    <h3>Paint-over for legibility</h3>
+                    <p>When motion stops, Selkies bursts a higher-quality pass over static regions, with full 4:4:4 chroma where the encoder supports it, so text is crisp, not smeared.</p>
+                </article>
+            </div>
+
+            <div class="hybrid-compare reveal">
+                <div class="compare-row head"><span>Approach</span><span>Full-motion 3D</span><span>Idle desktop</span><span>Text clarity</span><span>System load</span></div>
+                <div class="compare-row"><span>Classic VNC / RFB</span><span class="bad">Slideshow</span><span class="good">Cheap</span><span class="mid">Good</span><span class="bad">CPU-bound on motion</span></div>
+                <div class="compare-row"><span>Pure video stream</span><span class="good">Smooth</span><span class="bad">Encodes anyway</span><span class="bad">Smeared</span><span class="mid">Constant, even idle</span></div>
+                <div class="compare-row hl"><span><img src="img/selkies.svg" alt="" width="18" height="18"> Selkies</span><span class="good">60+ FPS</span><span class="good">Zero frames</span><span class="good">Paint-over 4:4:4</span><span class="good">GPU: CPU barely touched</span></div>
+            </div>
+            <p class="compare-note reveal">With a GPU doing the encoding, the CPU is essentially idle on both the server and the client, since the browser hardware-decodes H.264. Without one, a 1080p 60 FPS software stream runs at roughly 60% of a single core, and ordinary desktop work sits around 10 to 20%. Your mileage will vary, but that is the class of overhead you should expect.</p>
+        </div>
+    </section>
+
+    <!-- ============================================================ FEATURES -->
+    <section class="section features" id="features">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="eyebrow">The total package</span>
+                <h2>Everything a desktop does. <span class="grad">From any browser.</span></h2>
+                <p>Selkies is not a viewer with a few extras bolted on. Every capability below ships in the core, works on both transports, and needs nothing installed on the client.</p>
+            </div>
+
+            <div class="feature-grid">
+                <article class="feature-card reveal spotlight">
+                    <div class="fi"><svg viewBox="0 0 24 24"><path d="M15 10l4.5-2.5v9L15 14M4 6h11v12H4z"/></svg></div>
+                    <h3>Webcam forwarding</h3>
+                    <p>Your browser's camera becomes a real V4L2 device inside the session. Video calls, OBS, OpenCV, all of it, decoded off the GIL with zero copies in Python.</p>
+                </article>
+                <article class="feature-card reveal spotlight" style="--d:.05s">
+                    <div class="fi"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zM19 11a7 7 0 0 1-14 0M12 18v3M8 21h8"/></svg></div>
+                    <h3>Microphone uplink</h3>
+                    <p>Opus-encoded audio from your mic shows up as an ordinary PulseAudio source. Applications record it like any capture device.</p>
+                </article>
+                <article class="feature-card reveal spotlight" style="--d:.1s">
+                    <div class="fi"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM7 9h.01M11 9h.01M15 9h.01M7 13h10"/></svg></div>
+                    <h3>Any language, any layout</h3>
+                    <p>Full IME composition streaming, non-Latin layouts, and modifier healing across browsers. Type Japanese, Korean, Arabic or Dvorak and it just works.</p>
+                </article>
+                <article class="feature-card reveal spotlight" style="--d:.15s">
+                    <div class="fi"><svg viewBox="0 0 24 24"><path d="M2 5h9v11H2zM13 8h9v11h-9zM6 20h1M17 22h1"/></svg></div>
+                    <h3>Dual monitors</h3>
+                    <p>One click adds a second screen as a companion browser window. Drag it to your other physical monitor and you have a real extended desktop.</p>
+                </article>
+                <article class="feature-card reveal spotlight" style="--d:.2s">
+                    <div class="fi"><svg viewBox="0 0 24 24"><path d="M6 8h12a4 4 0 0 1 4 4v1a4 4 0 0 1-4 4h-1l-2-2H9l-2 2H6a4 4 0 0 1-4-4v-1a4 4 0 0 1 4-4zM7 11v3M5.5 12.5h3M16 11h.01M18 13h.01"/></svg></div>
+                    <h3>Gamepads, real and touch</h3>
+                    <p>Browser gamepads are injected as kernel-style joysticks that Steam and Proton see. On phones and tablets, a customizable on-screen touch gamepad fills in.</p>
+                </article>
+                <article class="feature-card reveal spotlight" style="--d:.25s">
+                    <div class="fi"><svg viewBox="0 0 24 24"><path d="M9 3h6v4H9zM6 5H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1M8 13l2 2 4-4"/></svg></div>
+                    <h3>Two-way clipboard, text and images</h3>
+                    <p>Copy and paste in both directions, including binary image clipboards. Large payloads are chunked automatically across Chromium, Firefox and Safari.</p>
+                </article>
+                <article class="feature-card reveal spotlight" style="--d:.3s">
+                    <div class="fi"><svg viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></svg></div>
+                    <h3>File uploads and downloads</h3>
+                    <p>Drag files into the session or browse and pull them out. Transfers are paced against the video stream end to end, so a big upload never stalls your desktop.</p>
+                </article>
+                <article class="feature-card reveal spotlight" style="--d:.35s">
+                    <div class="fi"><svg viewBox="0 0 24 24"><path d="M16 11a4 4 0 1 0-8 0 4 4 0 0 0 8 0zM4 21a8 8 0 0 1 16 0M20 8a3 3 0 1 0 0-6"/></svg></div>
+                    <h3>Session sharing</h3>
+                    <p>Hand out viewer links, or player 2 through 4 links that drive their own gamepad slot. Roles are enforced on the server, not trusted from the page.</p>
+                </article>
+                <article class="feature-card reveal spotlight" style="--d:.4s">
+                    <div class="fi"><svg viewBox="0 0 24 24"><path d="M4 4h16v10H4zM10 18h4M12 14v4M8 8l2 2-2 2M12 12h4"/></svg></div>
+                    <h3>Gaming mode</h3>
+                    <p>Fullscreen with the pointer and keyboard held, raw mouse motion with no acceleration curve, and Escape, Alt+Tab and every chord delivered to the game.</p>
+                </article>
+                <article class="feature-card reveal spotlight" style="--d:.45s">
+                    <div class="fi"><svg viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6M3 18a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3M21 18a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/></svg></div>
+                    <h3>Surround audio</h3>
+                    <p>Full-band Opus with silence gating and optional redundancy. Mono, stereo, 5.1 and 7.1 layouts that Chromium decodes natively.</p>
+                </article>
+                <article class="feature-card reveal spotlight" style="--d:.5s">
+                    <div class="fi"><svg viewBox="0 0 24 24"><path d="M12 2l7 4v6c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-4zM9 12l2 2 4-4"/></svg></div>
+                    <h3>Secure by design</h3>
+                    <p>HTTPS out of the box, HTTP Basic auth or any reverse proxy in front, and a token-based Secure Mode that provisions per-session roles.</p>
+                </article>
+                <article class="feature-card reveal spotlight" style="--d:.55s">
+                    <div class="fi"><svg viewBox="0 0 24 24"><path d="M12 8V4H8M4 8h16v12H4zM8 12h.01M16 12h.01M9 16h6M2 14h2M20 14h2"/></svg></div>
+                    <h3>Built for AI agents</h3>
+                    <p>A Computer Use API dumps screenshots and drives keyboard and mouse, so agents can operate a full desktop through the same pipeline you watch.</p>
+                </article>
+            </div>
+
+            <ul class="feature-ticker reveal" aria-label="More capabilities">
+                <li>Pointer lock</li><li>Fullscreen</li><li>Trackpad mode for touch</li><li>Virtual keyboard</li><li>HiDPI pixel-perfect</li><li>Dynamic resize and presets</li><li>Turbo mode</li><li>Live encoder, bitrate, CRF and FPS</li><li>Live CPU, GPU and bitrate gauges</li><li>Watermarking</li><li>MP4 recording</li><li>In-session app manager</li><li>Per-setting UI locking</li><li>Subfolder reverse proxies</li><li>Embeddable in any page</li><li>Three dashboards to fork</li><li>Translated UI</li><li>Kubernetes-ready</li><li>No root required</li><li>No systemd required</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ============================================================ PIPELINE -->
+    <section class="section pipeline" id="pipeline">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="eyebrow">Under the hood</span>
+                <h2>From pixels to your browser <span class="grad">in one hop.</span></h2>
+                <p>A single Python application orchestrates two small Rust extensions. The performance-critical path never touches the interpreter, and on the Wayland GPU path never touches system RAM at all.</p>
+            </div>
+
+            <div class="pipe-diagram reveal">
+                <svg viewBox="0 0 1200 420" class="pipe-svg" role="img" aria-labelledby="pipeTitle">
+                    <title id="pipeTitle">Selkies streaming pipeline</title>
+                    <defs>
+                        <linearGradient id="pipeGrad" x1="0" x2="1" y1="0" y2="0">
+                            <stop offset="0" stop-color="#D5499A"/><stop offset=".55" stop-color="#C34AA2"/><stop offset="1" stop-color="#7967C5"/>
+                        </linearGradient>
+                        <linearGradient id="audioGrad" x1="0" x2="1" y1="0" y2="0">
+                            <stop offset="0" stop-color="#4fd1c5"/><stop offset="1" stop-color="#7967C5"/>
+                        </linearGradient>
+                        <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                    </defs>
+
+                    <!-- video lane -->
+                    <path id="vpath" class="pipe-line" d="M150 150 H 360 M 520 150 H 680 M 840 150 H 1000"/>
+                    <path id="vflow" class="pipe-flow" d="M150 150 H 360 M 520 150 H 680 M 840 150 H 1000"/>
+                    <!-- audio lane -->
+                    <path class="pipe-line audio" d="M150 300 H 360 M 520 300 H 680 M 840 300 H 1000"/>
+                    <path class="pipe-flow audio" d="M150 300 H 360 M 520 300 H 680 M 840 300 H 1000"/>
+
+                    <!-- nodes: video -->
+                    <g class="node" transform="translate(30,105)">
+                        <rect width="120" height="90" rx="14"/>
+                        <text x="60" y="38" class="nt">Display</text>
+                        <text x="60" y="60" class="ns">X11 shm</text>
+                        <text x="60" y="76" class="ns">Wayland dmabuf</text>
+                    </g>
+                    <g class="node hot" transform="translate(360,95)">
+                        <rect width="160" height="110" rx="14"/>
+                        <text x="80" y="34" class="nt">pixelflux</text>
+                        <text x="80" y="56" class="ns">damage tracking</text>
+                        <text x="80" y="72" class="ns">NVENC &middot; VA-API</text>
+                        <text x="80" y="88" class="ns">x264 &middot; OpenH264 &middot; JPEG</text>
+                    </g>
+                    <g class="node" transform="translate(680,105)">
+                        <rect width="160" height="90" rx="14"/>
+                        <text x="80" y="38" class="nt">Transport</text>
+                        <text x="80" y="60" class="ns">WebRTC &middot; WebSockets</text>
+                        <text x="80" y="76" class="ns">swappable mid-session</text>
+                    </g>
+                    <g class="node" transform="translate(1000,105)">
+                        <rect width="170" height="90" rx="14"/>
+                        <text x="85" y="38" class="nt">Browser</text>
+                        <text x="85" y="60" class="ns">WebCodecs decode</text>
+                        <text x="85" y="76" class="ns">zero-copy canvas</text>
+                    </g>
+
+                    <!-- nodes: audio -->
+                    <g class="node" transform="translate(30,255)">
+                        <rect width="120" height="90" rx="14"/>
+                        <text x="60" y="38" class="nt">Audio</text>
+                        <text x="60" y="60" class="ns">PulseAudio</text>
+                        <text x="60" y="76" class="ns">PipeWire-Pulse</text>
+                    </g>
+                    <g class="node hot audio" transform="translate(360,255)">
+                        <rect width="160" height="90" rx="14"/>
+                        <text x="80" y="38" class="nt">pcmflux</text>
+                        <text x="80" y="60" class="ns">Opus &middot; silence gate</text>
+                        <text x="80" y="76" class="ns">up to 7.1 surround</text>
+                    </g>
+                    <g class="node" transform="translate(680,255)">
+                        <rect width="160" height="90" rx="14"/>
+                        <text x="80" y="38" class="nt">Same socket</text>
+                        <text x="80" y="60" class="ns">one connection</text>
+                        <text x="80" y="76" class="ns">one port</text>
+                    </g>
+                    <g class="node" transform="translate(1000,255)">
+                        <rect width="170" height="90" rx="14"/>
+                        <text x="85" y="38" class="nt">Speakers</text>
+                        <text x="85" y="60" class="ns">Web Audio</text>
+                        <text x="85" y="76" class="ns">Mic returns uplink</text>
+                    </g>
+
+                    <!-- uplink return arrows -->
+                    <path class="pipe-return" d="M1085 200 C 1085 235, 440 235, 440 205"/>
+                    <text x="760" y="228" class="nl">clipboard &middot; input &middot; mic &middot; webcam &middot; files return on the same connection</text>
+
+                    <!-- Selkies orchestration bracket -->
+                    <path class="pipe-bracket" d="M330 60 H 870"/>
+                    <text x="600" y="48" class="nl strong">Selkies (Python, aiohttp) orchestrates, never copies a pixel</text>
+                    <path class="pipe-bracket" d="M330 385 H 870"/>
+                    <text x="600" y="408" class="nl">Rust (PyO3) extensions carry the hot path</text>
+                </svg>
+            </div>
+
+            <div class="pipe-facts">
+                <div class="fact reveal">
+                    <strong>Zero copy on Wayland</strong>
+                    <p>Frames flow as dmabufs from the compositor's GBM buffers straight into the hardware encoder. The CPU never sees a pixel.</p>
+                </div>
+                <div class="fact reveal" style="--d:.08s">
+                    <strong>Exactly one copy on X11</strong>
+                    <p>The X server renders into shared memory and encoder threads read it in place. Encoded bytes reach Python through the buffer protocol, uncopied.</p>
+                </div>
+                <div class="fact reveal" style="--d:.16s">
+                    <strong>Hardware first, always a fallback</strong>
+                    <p>NVENC on NVIDIA, VA-API on Intel and AMD, then x264 or the BSD-licensed OpenH264, with JPEG kept around for browsers too old for WebCodecs. Something always works.</p>
+                </div>
+                <div class="fact reveal" style="--d:.24s">
+                    <strong>Hardware decode in the browser</strong>
+                    <p>WebCodecs on WebSockets, the native RTC decoder on WebRTC. Either way the browser hardware-decodes H.264, your laptop stays cool, and there is no plugin to install.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================================================================= GPU -->
+    <section class="section gpu" id="gpu">
+        <div class="container split">
+            <div class="split-copy reveal">
+                <span class="eyebrow">GPU support</span>
+                <h2>Mount the card in. <span class="grad">We figure out the rest.</span></h2>
+                <p>
+                    Pass a DRM render node or the NVIDIA runtime into the container and Selkies detects the GPU, picks the encoder,
+                    and switches on DRI3 or Zink for 3D rendering. Multi-GPU hosts, mixed vendors, and containers with no GPU at
+                    all are all handled without a config file.
+                </p>
+                <ul class="check-list">
+                    <li><b>NVIDIA</b> NVENC with High 4:4:4, ARGB-direct encode and multi-GPU containers, CUDA 11 through 13.</li>
+                    <li><b>Intel and AMD</b> VA-API with VA-VPP conversion and per-device 4:4:4 negotiation.</li>
+                    <li><b>No GPU</b> x264 or OpenH264 with multi-threaded striping still hits 60 FPS at 1080p on modest CPUs.</li>
+                    <li><b>Wayland</b> a headless Smithay compositor owned by Selkies, or capture of a running wlroots, KDE or COSMIC session.</li>
+                </ul>
+                <div class="code-block">
+                    <button class="copy-btn" data-copy>Copy</button>
+                    <pre><code>docker run -d --name selkies --shm-size=2g -p 8080:8080 \
+  --gpus 1 --runtime nvidia \
+  ghcr.io/selkies-project/selkies/desktop:main-ubuntu26.04</code></pre>
+                </div>
+            </div>
+            <div class="split-visual reveal" style="--d:.15s">
+                <div class="gpu-card tilt" data-tilt-max="8">
+                    <div class="gpu-fan" aria-hidden="true">
+                        <div class="fan-ring"></div>
+                        <div class="fan-blades"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                        <div class="fan-hub"></div>
+                    </div>
+                    <div class="gpu-probe" aria-hidden="true">
+                        <div class="probe-line" style="--i:0"><span class="ok">&#10003;</span> /dev/dri/renderD128 detected</div>
+                        <div class="probe-line" style="--i:1"><span class="ok">&#10003;</span> NVENC available &middot; H.264 High 4:4:4</div>
+                        <div class="probe-line" style="--i:2"><span class="ok">&#10003;</span> Zink + DRI3 enabled for OpenGL</div>
+                        <div class="probe-line" style="--i:3"><span class="ok">&#10003;</span> dmabuf zero-copy path active</div>
+                        <div class="probe-line" style="--i:4"><span class="cur">&#9646;</span> streaming 1920&times;1080 @ 60</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================== TRANSPORT -->
+    <section class="section transport" id="transport">
+        <div class="container split rev">
+            <div class="split-copy reveal">
+                <span class="eyebrow">Transport</span>
+                <h2>WebRTC and WebSockets. <span class="grad">Two first-class transports.</span></h2>
+                <p>
+                    Selkies was born on WebRTC, and 2.0 brings it back as a first-class citizen: the lowest latency the web can
+                    offer, its own congestion control, and every VNC-style trick Selkies does, damage gating, paint-over, on-demand
+                    keyframes, carried across the RTC standard. That is no small feat, and it is why WebRTC here does not behave
+                    like a video call.
+                </p>
+                <p>
+                    WebSockets is the other half. One TCP port, straight through nginx, Traefik, Caddy, a load balancer or a
+                    Kubernetes ingress, with no STUN, TURN, UDP or VPN in the picture. Same encoders, same damage logic, same
+                    client. Enable dual mode and users hot-swap between the two from the side menu without dropping the session.
+                </p>
+                <div class="pill-row">
+                    <span class="pill on">WebRTC <small>lowest latency</small></span>
+                    <span class="pill on">WebSockets <small>one port</small></span>
+                    <span class="pill">Dual mode <small>swap live</small></span>
+                </div>
+            </div>
+            <div class="split-visual reveal" style="--d:.15s">
+                <div class="net-stack" aria-hidden="true">
+                    <div class="net-diagram">
+                        <span class="net-label">WebRTC</span>
+                        <div class="net-node"><span class="net-ico">&#128187;</span><b>Browser</b><small>anywhere</small></div>
+                        <div class="net-link rtc"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                        <div class="net-node"><span class="net-ico">&#127760;</span><b>ICE / TURN</b><small>UDP or TCP</small></div>
+                        <div class="net-link rtc"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                        <div class="net-node hl"><img src="img/selkies.svg" alt="" width="28" height="28"><b>Selkies</b><small>same encoders</small></div>
+                    </div>
+                    <div class="net-swap"><span>&#8645;</span> hot-swap from the side menu</div>
+                    <div class="net-diagram">
+                        <span class="net-label">WebSockets</span>
+                        <div class="net-node"><span class="net-ico">&#128187;</span><b>Browser</b><small>anywhere</small></div>
+                        <div class="net-link"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                        <div class="net-node"><span class="net-ico">&#128274;</span><b>Reverse proxy</b><small>:443 TLS</small></div>
+                        <div class="net-link"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                        <div class="net-node hl"><img src="img/selkies.svg" alt="" width="28" height="28"><b>Selkies</b><small>one TCP port</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ USE CASES -->
+    <section class="section usecases" id="usecases">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="eyebrow">Who it's for</span>
+                <h2>Productivity, enterprise, research, <span class="grad">and full-motion gaming.</span></h2>
+                <p>One stack, tuned so that any performance problem a cloud gaming platform would care about is treated as a bug. That bar makes everything else effortless.</p>
+            </div>
+            <div class="usecase-grid">
+                <article class="usecase reveal">
+                    <span class="uc-num">01</span>
+                    <h3>Web-native VDI</h3>
+                    <p>Replace virtual machines with containers. No special devices, no root, no systemd. Hundreds of desktops per host, each behind one URL.</p>
+                </article>
+                <article class="usecase reveal" style="--d:.06s">
+                    <span class="uc-num">02</span>
+                    <h3>Remote browser isolation</h3>
+                    <p>Open links, files and downloads in a throwaway container instead of on the endpoint. The pixels come back; the malware does not.</p>
+                </article>
+                <article class="usecase reveal" style="--d:.12s">
+                    <span class="uc-num">03</span>
+                    <h3>Research and HPC</h3>
+                    <p>GUI tools on SLURM clusters, Jupyter and Kubernetes. Born at Google, matured at UC San Diego's National Research Platform.</p>
+                </article>
+                <article class="usecase reveal" style="--d:.18s">
+                    <span class="uc-num">04</span>
+                    <h3>Cloud gaming</h3>
+                    <p>Steam, Proton and Wine at 60+ FPS with gamepad passthrough, pointer lock and couch co-op links for players two through four.</p>
+                </article>
+                <article class="usecase reveal" style="--d:.24s">
+                    <span class="uc-num">05</span>
+                    <h3>Creative and 3D work</h3>
+                    <p>Blender, FreeCAD, DaVinci-class workloads with real GPU acceleration and 4:4:4 color, streamed like a local monitor.</p>
+                </article>
+                <article class="usecase reveal" style="--d:.3s">
+                    <span class="uc-num">06</span>
+                    <h3>AI agents and automation</h3>
+                    <p>A Computer Use API and text control plane let agents see and drive a full desktop while you watch the same stream.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================== SHOWCASE -->
+    <section class="section showcase" id="showcase">
+        <div class="container split">
+            <div class="split-visual reveal">
+                <div class="video-frame tilt" data-tilt-max="5">
+                    <video autoplay muted loop playsinline preload="metadata" poster="" aria-label="Selkies streaming a 3D application">
+                        <source src="img/selkies3d.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+            <div class="split-copy reveal" style="--d:.15s">
+                <span class="eyebrow">See it move</span>
+                <h2>Full-motion 3D, <span class="grad">in a browser tab.</span></h2>
+                <p>
+                    This is Selkies streaming a hardware-accelerated 3D application to a browser tab. No native client, no proprietary
+                    codec license, and the same picture whether it rides WebRTC or WebSockets. What you see is what every LinuxServer.io desktop container ships with.
+                </p>
+                <p>
+                    And when the scene stops moving, the encoder stops too. That is the part a video stream cannot do and the part
+                    a VNC never could.
+                </p>
+                <a href="https://docs.selkies.io/design" target="_blank" rel="noopener noreferrer" class="text-link">Read the design rationale &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================== ECOSYSTEM -->
+    <section class="section ecosystem" id="ecosystem">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="eyebrow">Ecosystem</span>
+                <h2>One core. <span class="grad">A whole platform built on it.</span></h2>
+                <p>Selkies is the engine. Around it, a family of projects across multiple organizations turns that engine into containers, app stores, isolation platforms and mobile apps.</p>
+            </div>
+
+            <div class="eco-grid">
+                <a class="eco-card core reveal spotlight" href="https://github.com/selkies-project/selkies" target="_blank" rel="noopener noreferrer">
+                    <div class="eco-head"><img src="img/selkies.svg" alt="" width="40" height="40"><span class="eco-tag">core</span></div>
+                    <h3>Selkies</h3>
+                    <p>The streaming platform itself: the Python runtime, the WebCodecs web client, the dashboards, the interposers and the container images.</p>
+                    <span class="eco-link">selkies-project/selkies</span>
+                </a>
+                <a class="eco-card reveal spotlight" style="--d:.05s" href="https://github.com/selkies-project/pixelflux" target="_blank" rel="noopener noreferrer">
+                    <div class="eco-head"><span class="eco-glyph">&#9638;</span><span class="eco-tag">rust</span></div>
+                    <h3>pixelflux</h3>
+                    <p>The pixel pipeline. X11 and Wayland capture, damage tracking, NVENC, VA-API, x264, OpenH264 and JPEG encoding, a virtual camera, a recorder, and a Computer Use API.</p>
+                    <span class="eco-link">selkies-project/pixelflux</span>
+                </a>
+                <a class="eco-card reveal spotlight" style="--d:.1s" href="https://github.com/selkies-project/pcmflux" target="_blank" rel="noopener noreferrer">
+                    <div class="eco-head"><span class="eco-glyph">&#9835;</span><span class="eco-tag">rust</span></div>
+                    <h3>pcmflux</h3>
+                    <p>The audio pipeline. PulseAudio capture to Opus with silence detection, RED redundancy, surround layouts and microphone playback for the uplink.</p>
+                    <span class="eco-link">selkies-project/pcmflux</span>
+                </a>
+                <a class="eco-card reveal spotlight" style="--d:.15s" href="https://sealskin.app/" target="_blank" rel="noopener noreferrer">
+                    <div class="eco-head"><img src="img/sealskin.png" alt="" width="40" height="40"><span class="eco-tag">platform</span></div>
+                    <h3>Sealskin</h3>
+                    <p>Your browser is your new computer. Self-hosted browser isolation and app streaming with browser extensions, iOS and Android apps, and collaboration rooms.</p>
+                    <span class="eco-link">sealskin.app</span>
+                </a>
+                <a class="eco-card reveal spotlight" style="--d:.2s" href="https://github.com/linuxserver/docker-baseimage-selkies" target="_blank" rel="noopener noreferrer">
+                    <div class="eco-head"><span class="eco-glyph">&#9776;</span><span class="eco-tag">linuxserver.io</span></div>
+                    <h3>Selkies base images</h3>
+                    <p>The LinuxServer.io base for every web-native desktop container: GPU auto-detection, hardening presets, watermarks, subfolder proxies, DinD and more.</p>
+                    <span class="eco-link">linuxserver/docker-baseimage-selkies</span>
+                </a>
+                <a class="eco-card reveal spotlight" style="--d:.25s" href="https://github.com/linuxserver/docker-webtop" target="_blank" rel="noopener noreferrer">
+                    <div class="eco-head"><span class="eco-glyph">&#9974;</span><span class="eco-tag">linuxserver.io</span></div>
+                    <h3>Webtop and 100+ apps</h3>
+                    <p>Full desktops in KDE, XFCE, MATE, i3 and more, plus a library of single-application containers. Hundreds of millions of pulls across the family.</p>
+                    <span class="eco-link">linuxserver/docker-webtop</span>
+                </a>
+                <a class="eco-card reveal spotlight" style="--d:.3s" href="https://github.com/linuxserver/sealskin-apps" target="_blank" rel="noopener noreferrer">
+                    <div class="eco-head"><span class="eco-glyph">&#9783;</span><span class="eco-tag">catalog</span></div>
+                    <h3>Sealskin app store</h3>
+                    <p>The manifest of every launchable application, its file associations, GPU flags and autostart scripts, in X11 and Wayland flavors.</p>
+                    <span class="eco-link">linuxserver/sealskin-apps</span>
+                </a>
+                <a class="eco-card reveal spotlight" style="--d:.35s" href="https://docs.selkies.io/" target="_blank" rel="noopener noreferrer">
+                    <div class="eco-head"><span class="eco-glyph">&#9998;</span><span class="eco-tag">docs</span></div>
+                    <h3>Documentation</h3>
+                    <p>Getting started, native installs and AppImages, every setting with its flag and default, firewall guidance, secure mode and the developer reference.</p>
+                    <span class="eco-link">docs.selkies.io</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="app-scroller reveal">
+            <div class="container section-sub">
+                <p>Every one of these runs on Selkies today.</p>
+            </div>
+            <div class="scroller-track" id="appTrack"></div>
+        </div>
+    </section>
+
+    <!-- ============================================================ LINEAGE -->
+    <section class="section lineage" id="lineage">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="eyebrow">Lineage</span>
+                <h2>Not an overnight project. <span class="grad">A decade of streaming.</span></h2>
+            </div>
+            <ol class="timeline">
+                <li class="reveal"><span class="tl-dot"></span><h3>Born inside Google</h3><p>Started by Google engineers as a reference for GPU-accelerated streaming over WebRTC on Kubernetes.</p></li>
+                <li class="reveal" style="--d:.08s"><span class="tl-dot"></span><h3>Open-sourced and adopted by research</h3><p>Developed by academic researchers at UC San Diego's National Research Platform, with National Science Foundation support, for HPC and scientific workloads.</p></li>
+                <li class="reveal" style="--d:.16s"><span class="tl-dot"></span><h3>LinuxServer.io goes all in</h3><p>The LinuxServer.io community replaced its VNC base images with Selkies across every desktop container, bringing a massive user base and a second engineering organization.</p></li>
+                <li class="reveal" style="--d:.24s"><span class="tl-dot"></span><h3>Rebuilt for 2.0</h3><p>Rust capture and encode pipelines, native Wayland through Smithay, WebSockets by default, WebCodecs decode, and a web client rewritten around them.</p></li>
+                <li class="reveal" style="--d:.32s"><span class="tl-dot cur"></span><h3>Today</h3><p>Maintained by a community spanning multiple organizations, deployed everywhere from laptops to supercomputers, aiming to be the standard for web-delivered Linux.</p></li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- ========================================================= GET STARTED -->
+    <section class="section start" id="start">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="eyebrow">Get started</span>
+                <h2>Running in <span class="grad">under a minute.</span></h2>
+                <p>Pick a flavor. Every one lands you in a desktop at a URL with nothing installed on the client.</p>
+            </div>
+
+            <div class="tabs reveal" id="startTabs">
+                <div class="tab-list" role="tablist" aria-label="Install options">
+                    <button role="tab" aria-selected="true" data-tab="docker">Docker</button>
+                    <button role="tab" aria-selected="false" data-tab="nvidia">NVIDIA</button>
+                    <button role="tab" aria-selected="false" data-tab="webtop">LinuxServer Webtop</button>
+                    <button role="tab" aria-selected="false" data-tab="native">Native / AppImage</button>
+                    <span class="tab-indicator" aria-hidden="true"></span>
+                </div>
+
+                <div class="tab-panel" role="tabpanel" data-panel="docker">
+                    <p>The reference LXQt desktop with Firefox and Chrome, an embedded TURN server, and a snakeoil HTTPS certificate. Add <code>--device /dev/dri</code> for an Intel or AMD GPU.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" data-copy>Copy</button>
+                        <pre><code>docker run --name selkies -it -d --rm --shm-size=2g -p 8080:8080 \
+    ghcr.io/selkies-project/selkies/desktop:main-ubuntu26.04</code></pre>
+                    </div>
+                    <p class="code-note">Then open <code>https://localhost:8080</code>. Add <code>-e SELKIES_MODE=webrtc</code> for the WebRTC transport, or <code>-e SELKIES_ENABLE_DUAL_MODE=true</code> to offer both. Full walkthrough in <a href="https://docs.selkies.io/start" target="_blank" rel="noopener noreferrer">Getting Started</a>.</p>
+                </div>
+
+                <div class="tab-panel" role="tabpanel" data-panel="nvidia" hidden>
+                    <p>With the NVIDIA Container Toolkit the runtime flags pass the driver, its Vulkan ICD and the DRM nodes in. Selkies picks NVENC automatically.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" data-copy>Copy</button>
+                        <pre><code>docker run --name selkies -it -d --rm --shm-size=2g -p 8080:8080 \
+    --gpus 1 --runtime nvidia \
+    ghcr.io/selkies-project/selkies/desktop:main-ubuntu26.04</code></pre>
+                    </div>
+                    <p class="code-note">Intel or AMD instead? Swap the GPU flags for <code>--device /dev/dri --group-add "$(stat -c %g /dev/dri/renderD128)"</code>.</p>
+                </div>
+
+                <div class="tab-panel" role="tabpanel" data-panel="webtop" hidden>
+                    <p>The LinuxServer.io Webtop family gives you KDE, XFCE, MATE, i3 and more, on Alpine, Ubuntu, Debian, Fedora or Arch, with GPU auto-detection and passwordless sudo.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" data-copy>Copy</button>
+                        <pre><code>docker run -d --name webtop --shm-size=1gb -p 3000:3000 -p 3001:3001 \
+    -e PUID=1000 -e PGID=1000 -e TZ=Etc/UTC \
+    -v ./config:/config \
+    lscr.io/linuxserver/webtop:latest</code></pre>
+                    </div>
+                    <p class="code-note">Open <code>https://localhost:3001</code>. Every option is documented at <a href="https://docs.linuxserver.io/images/docker-webtop/" target="_blank" rel="noopener noreferrer">docs.linuxserver.io</a>.</p>
+                </div>
+
+                <div class="tab-panel" role="tabpanel" data-panel="native" hidden>
+                    <p>Packages for Ubuntu, Debian, Fedora, Enterprise Linux, Alpine and Arch, or a single AppImage that installs nothing and attaches to the display and audio server you already run.</p>
+                    <div class="code-block">
+                        <button class="copy-btn" data-copy>Copy</button>
+                        <pre><code>export SELKIES_VERSION="$(curl -fsSL https://api.github.com/repos/selkies-project/selkies/releases/latest | jq -r '.tag_name' | sed 's/^v//')"
+APP="selkies-${SELKIES_VERSION}-$(uname -m).AppImage"
+curl -O -fsSL "https://github.com/selkies-project/selkies/releases/download/v${SELKIES_VERSION}/${APP}"
+chmod +x "./${APP}"
+"./${APP}" --addr=0.0.0.0,:: --port=8080 --basic-auth-user=user --basic-auth-password=mypasswd</code></pre>
+                    </div>
+                    <p class="code-note">Package installs and session scripts are in the <a href="https://docs.selkies.io/native" target="_blank" rel="noopener noreferrer">Native Install</a> guide.</p>
+                </div>
+            </div>
+
+            <div class="start-links reveal">
+                <a href="https://docs.selkies.io/start" target="_blank" rel="noopener noreferrer"><b>Getting Started</b><span>Containers, GPUs, HTTPS and first login</span></a>
+                <a href="https://docs.selkies.io/settings" target="_blank" rel="noopener noreferrer"><b>Settings Reference</b><span>Every flag, env var, type and default</span></a>
+                <a href="https://docs.selkies.io/firewall" target="_blank" rel="noopener noreferrer"><b>Firewalls and WebRTC</b><span>Port ranges, muxing, TURN and ICE-lite</span></a>
+                <a href="https://docs.selkies.io/secure-mode" target="_blank" rel="noopener noreferrer"><b>Secure Mode</b><span>Token authentication and per-session roles</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================== COMMUNITY -->
+    <section class="section community" id="community">
+        <div class="container">
+            <div class="community-card reveal">
+                <div class="community-bg" aria-hidden="true"></div>
+                <div class="community-copy">
+                    <h2>Open source. Always free. <span class="grad">Built by people who use it every day.</span></h2>
+                    <p>
+                        Selkies is licensed under the Mozilla Public License 2.0 and maintained by contributors across the Selkies project,
+                        LinuxServer.io, academia and the wider community. We can never have too much help.
+                    </p>
+                    <div class="community-actions">
+                        <a href="https://discord.gg/wDNGDeSW5F" target="_blank" rel="noopener noreferrer" class="btn btn-primary magnetic">Join the Discord</a>
+                        <a href="https://github.com/selkies-project/selkies" target="_blank" rel="noopener noreferrer" class="btn btn-secondary magnetic">Star on GitHub</a>
+                        <a href="https://github.com/selkies-project/selkies/discussions" target="_blank" rel="noopener noreferrer" class="btn btn-ghost magnetic">Discussions</a>
+                    </div>
+                </div>
+                <ul class="community-links">
+                    <li><a href="https://docs.selkies.io/development" target="_blank" rel="noopener noreferrer">Contributing guide</a></li>
+                    <li><a href="https://github.com/selkies-project/selkies/issues" target="_blank" rel="noopener noreferrer">Report a bug</a></li>
+                    <li><a href="https://docs.selkies.io/citation" target="_blank" rel="noopener noreferrer">Cite Selkies in your research</a></li>
+                    <li><a href="https://docs.selkies.io/licensing" target="_blank" rel="noopener noreferrer">Licensing inventory</a></li>
+                    <li><a href="https://discord.com/invite/linuxserver" target="_blank" rel="noopener noreferrer">LinuxServer.io Discord</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="#top" class="logo"><img src="img/selkies.svg" alt="" width="32" height="32"><span class="logo-word">Selkies</span></a>
+                <p>Open-source, low-latency, GPU-accelerated Linux desktop and application streaming for the web.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Project</h4>
+                <a href="https://github.com/selkies-project/selkies" target="_blank" rel="noopener noreferrer">Source code</a>
+                <a href="https://github.com/selkies-project/selkies/releases" target="_blank" rel="noopener noreferrer">Releases</a>
+                <a href="https://docs.selkies.io/" target="_blank" rel="noopener noreferrer">Documentation</a>
+                <a href="https://docs.selkies.io/faq" target="_blank" rel="noopener noreferrer">FAQ</a>
+            </div>
+            <div class="footer-col">
+                <h4>Ecosystem</h4>
+                <a href="https://github.com/selkies-project/pixelflux" target="_blank" rel="noopener noreferrer">pixelflux</a>
+                <a href="https://github.com/selkies-project/pcmflux" target="_blank" rel="noopener noreferrer">pcmflux</a>
+                <a href="https://sealskin.app/" target="_blank" rel="noopener noreferrer">Sealskin</a>
+                <a href="https://github.com/linuxserver/docker-webtop" target="_blank" rel="noopener noreferrer">LinuxServer Webtop</a>
+            </div>
+            <div class="footer-col">
+                <h4>Community</h4>
+                <a href="https://discord.gg/wDNGDeSW5F" target="_blank" rel="noopener noreferrer">Discord</a>
+                <a href="https://github.com/selkies-project/selkies/discussions" target="_blank" rel="noopener noreferrer">Discussions</a>
+                <a href="https://github.com/selkies-project" target="_blank" rel="noopener noreferrer">GitHub organization</a>
+                <a href="https://www.linuxserver.io/" target="_blank" rel="noopener noreferrer">LinuxServer.io</a>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <span>&copy; <span id="year">2026</span> The Selkies Project. MPL-2.0.</span>
+            <span>Trademarks belong to their respective owners. No component of this project is an official product of Google LLC.</span>
+        </div>
+    </footer>
+
+    <script src="apps.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
