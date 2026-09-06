@@ -29,7 +29,7 @@ Then open http://localhost:8000. Any static file server works.
 ## Deploy
 
 Pushes to `main` run the [GitHub Pages workflow](.github/workflows/main.yaml), which copies the
-site files into `public/` and publishes them. `CNAME` pins the custom domain.
+site files into `public/` and publishes them. The custom domain is a repository setting.
 
 `npm run build` produces the same `public/` directory locally.
 
