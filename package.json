@@ -1,6 +1,9 @@
 {
-  "devDependencies": {
-    "autoprefixer": "^9.8.6",
-    "postcss-cli": "^7.1.2"
+  "name": "selkies-web",
+  "private": true,
+  "description": "Landing page for selkies.io",
+  "scripts": {
+    "start": "python3 -m http.server 8000 --bind 0.0.0.0",
+    "build": "rm -rf public && mkdir -p public && cp -r index.html index.css index.js apps.js favicon.ico CNAME img public/"
   }
 }
