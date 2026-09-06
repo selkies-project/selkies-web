@@ -1,9 +1,11 @@
+# The site has no runtime dependencies: package.json carries scripts alone, so
+# the deploy workflow's actions are the only pinned versions in the repository.
 version: 2
 updates:
-  - package-ecosystem: npm
-    directory: "/"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: daily
-      time: "09:00"
-      timezone: "America/Los_Angeles"
-    open-pull-requests-limit: 10
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
