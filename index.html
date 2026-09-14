@@ -719,9 +719,10 @@
                     <p>Packages for Ubuntu, Debian, Fedora, Enterprise Linux, Alpine and Arch, or a single AppImage that installs nothing and attaches to the display and audio server you already run.</p>
                     <div class="code-block">
                         <button class="copy-btn" data-copy>Copy</button>
-                        <pre><code>export SELKIES_VERSION="$(curl -fsSL https://api.github.com/repos/selkies-project/selkies/releases/latest | jq -r '.tag_name' | sed 's/^v//')"
+                        <pre><code>export SELKIES_TAG="$(curl -fsSL https://api.github.com/repos/selkies-project/selkies/releases/latest | jq -r '.tag_name')"
+export SELKIES_VERSION="${SELKIES_TAG#v}"
 APP="selkies-${SELKIES_VERSION}-$(uname -m).AppImage"
-curl -O -fsSL "https://github.com/selkies-project/selkies/releases/download/v${SELKIES_VERSION}/${APP}"
+curl -O -fsSL "https://github.com/selkies-project/selkies/releases/download/${SELKIES_TAG}/${APP}"
 chmod +x "./${APP}"
 "./${APP}" --addr=0.0.0.0,:: --port=8080 --basic-auth-user=user --basic-auth-password=mypasswd</code></pre>
                     </div>
