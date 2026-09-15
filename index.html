@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selkies | Linux desktops and applications in any web browser</title>
-    <meta name="description" content="Selkies is the open-source, GPU-accelerated platform that streams Linux X11 and Wayland desktops and applications to any web browser at 60+ FPS. WebSockets or WebRTC, damage-aware hybrid streaming, webcam, microphone, gamepads, dual monitors and more. Free forever.">
+    <meta name="description" content="Selkies is the open-source, GPU-accelerated platform that streams Linux X11 and Wayland desktops and applications to any web browser at 60+ FPS. WebSockets or WebRTC, zero-copy GPU capture on X11 and Wayland, damage-aware hybrid streaming, webcam, microphone, gamepads, dual monitors and more. Free forever.">
     <meta name="author" content="The Selkies Project">
     <meta name="keywords" content="Selkies, remote desktop, Linux, web browser, WebRTC, WebSockets, WebCodecs, H.264, NVENC, VA-API, Wayland, X11, VDI, remote browser isolation, cloud gaming, Docker, Kubernetes, noVNC alternative, Guacamole alternative, LinuxServer.io, pixelflux, pcmflux, Sealskin">
     <meta name="robots" content="index, follow">
@@ -44,7 +44,7 @@
         "url": "https://github.com/selkies-project",
         "sameAs": ["https://discord.gg/wDNGDeSW5F", "https://github.com/selkies-project/selkies"]
       },
-      "featureList": "WebRTC and WebSockets transports, NVENC and VA-API hardware encoding, zero-copy Wayland capture, damage-aware hybrid streaming, webcam and microphone forwarding, gamepad and touch gamepad input, dual monitors, binary clipboard, file transfers, session sharing"
+      "featureList": "WebRTC and WebSockets transports, NVENC and VA-API hardware encoding, zero-copy X11 and Wayland capture, damage-aware hybrid streaming, webcam and microphone forwarding, gamepad and touch gamepad input, dual monitors, binary clipboard, file transfers, session sharing"
     }
     </script>
 </head>
@@ -310,7 +310,7 @@
             <div class="section-header reveal">
                 <span class="eyebrow">Under the hood</span>
                 <h2>From pixels to your browser <span class="grad">in one hop.</span></h2>
-                <p>A single Python application orchestrates two small Rust extensions. The performance-critical path never touches the interpreter, and on the Wayland GPU path never touches system RAM at all.</p>
+                <p>A single Python application orchestrates two small Rust extensions. The performance-critical path never touches the interpreter, and on a GPU, X11 or Wayland, never touches system RAM at all.</p>
             </div>
 
             <div class="pipe-diagram reveal">
@@ -337,7 +337,7 @@
                     <g class="node" transform="translate(30,105)">
                         <rect width="120" height="90" rx="14"/>
                         <text x="60" y="38" class="nt">Display</text>
-                        <text x="60" y="60" class="ns">X11 shm</text>
+                        <text x="60" y="60" class="ns">X11 DRI3 dmabuf</text>
                         <text x="60" y="76" class="ns">Wayland dmabuf</text>
                     </g>
                     <g class="node hot" transform="translate(360,95)">
@@ -400,12 +400,12 @@
 
             <div class="pipe-facts">
                 <div class="fact reveal">
-                    <strong>Zero copy on Wayland</strong>
-                    <p>Frames flow as dmabufs from the compositor's GBM buffers straight into the hardware encoder. The CPU never sees a pixel.</p>
+                    <strong>Zero copy on X11</strong>
+                    <p>The X server draws its screen on the GPU. Each frame is one GPU blit into a dmabuf pixelflux owns, and NVENC or VA-API encodes it in place. Any vendor, and the card stays shared between sessions.</p>
                 </div>
                 <div class="fact reveal" style="--d:.08s">
-                    <strong>Exactly one copy on X11</strong>
-                    <p>The X server renders into shared memory and encoder threads read it in place. Encoded bytes reach Python through the buffer protocol, uncopied.</p>
+                    <strong>Zero copy on Wayland</strong>
+                    <p>Frames flow as dmabufs from the compositor's GBM buffers straight into the hardware encoder. The CPU never sees a pixel, and encoded bytes reach Python through the buffer protocol, uncopied.</p>
                 </div>
                 <div class="fact reveal" style="--d:.16s">
                     <strong>Hardware first, always a fallback</strong>
@@ -427,13 +427,14 @@
                 <h2>Mount the card in. <span class="grad">We figure out the rest.</span></h2>
                 <p>
                     Pass a DRM render node or the NVIDIA runtime into the container and Selkies detects the GPU, picks the encoder,
-                    and switches on DRI3 or Zink for 3D rendering. Multi-GPU hosts, mixed vendors, and containers with no GPU at
+                    and brings up hardware OpenGL through DRI3 on the vendor's own driver. Multi-GPU hosts, mixed vendors, and containers with no GPU at
                     all are all handled without a config file.
                 </p>
                 <ul class="check-list">
                     <li><b>NVIDIA</b> NVENC with High 4:4:4, ARGB-direct encode and multi-GPU containers, CUDA 11 through 13.</li>
                     <li><b>Intel and AMD</b> VA-API with VA-VPP conversion and per-device 4:4:4 negotiation.</li>
                     <li><b>No GPU</b> x264 or OpenH264 with multi-threaded striping still hits 60 FPS at 1080p on modest CPUs.</li>
+                    <li><b>X11</b> an XLibre Xvfb whose screen pixmap lives on the GPU, so capture is a DRI3 blit into the encoder and never a readback.</li>
                     <li><b>Wayland</b> a headless Smithay compositor owned by Selkies, or capture of a running wlroots, KDE or COSMIC session.</li>
                 </ul>
                 <div class="code-block">
@@ -453,7 +454,7 @@
                     <div class="gpu-probe" aria-hidden="true">
                         <div class="probe-line" style="--i:0"><span class="ok">&#10003;</span> /dev/dri/renderD128 detected</div>
                         <div class="probe-line" style="--i:1"><span class="ok">&#10003;</span> NVENC available &middot; H.264 High 4:4:4</div>
-                        <div class="probe-line" style="--i:2"><span class="ok">&#10003;</span> Zink + DRI3 enabled for OpenGL</div>
+                        <div class="probe-line" style="--i:2"><span class="ok">&#10003;</span> DRI3 on the GPU enabled for OpenGL</div>
                         <div class="probe-line" style="--i:3"><span class="ok">&#10003;</span> dmabuf zero-copy path active</div>
                         <div class="probe-line" style="--i:4"><span class="cur">&#9646;</span> streaming 1920&times;1080 @ 60</div>
                     </div>
@@ -597,7 +598,7 @@
                 <a class="eco-card reveal spotlight" style="--d:.05s" href="https://github.com/selkies-project/pixelflux" target="_blank" rel="noopener noreferrer">
                     <div class="eco-head"><span class="eco-glyph">&#9638;</span><span class="eco-tag">rust</span></div>
                     <h3>pixelflux</h3>
-                    <p>The pixel pipeline. X11 and Wayland capture, damage tracking, NVENC, VA-API, x264, OpenH264 and JPEG encoding, a virtual camera, a recorder, and a Computer Use API.</p>
+                    <p>The pixel pipeline. Zero-copy X11 and Wayland capture, damage tracking, NVENC, VA-API, x264, OpenH264 and JPEG encoding, a virtual camera, a recorder, and a Computer Use API.</p>
                     <span class="eco-link">selkies-project/pixelflux</span>
                 </a>
                 <a class="eco-card reveal spotlight" style="--d:.1s" href="https://github.com/selkies-project/pcmflux" target="_blank" rel="noopener noreferrer">
