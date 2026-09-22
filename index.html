@@ -693,7 +693,7 @@
                 </div>
 
                 <div class="tab-panel" role="tabpanel" data-panel="nvidia" hidden>
-                    <p>With the NVIDIA Container Toolkit the runtime flags pass the driver, its Vulkan ICD and the DRM nodes in. Selkies picks NVENC automatically.</p>
+                    <p>With the NVIDIA Container Toolkit (v1.20.1 or higher) the runtime flags pass the driver, its Vulkan ICD and the DRM nodes in. Selkies picks NVENC automatically.</p>
                     <div class="code-block">
                         <button class="copy-btn" data-copy>Copy</button>
                         <pre><code>docker run --name selkies -it -d --rm --shm-size=2g -p 8080:8080 \
