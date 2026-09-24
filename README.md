@@ -10,8 +10,8 @@ It is a static site: no framework, no build step. Documentation lives separately
 
 | File | Purpose |
 | --- | --- |
-| `index.html` | The page. Every section is plain HTML with links out to docs, repos and the community. |
-| `index.css` | Styling and every CSS-driven animation (aurora, stripe demos, pipeline flow, tilt and spotlight hooks). |
+| `index.html` | The page. Every section is plain HTML with links out to docs, repos, and the community. |
+| `index.css` | Styling and every CSS-driven animation (aurora, stripe demos, pipeline flow, and the tilt and spotlight hooks). |
 | `index.js` | Scroll reveals, counters, tilt and magnetic pointer effects, tabs, copy buttons, the app marquee, and the hero stream simulation drawn on a canvas. |
 | `apps.js` | The list of LinuxServer.io application containers shown in the marquee. |
 | `img/` | Logos and the demo video. |
