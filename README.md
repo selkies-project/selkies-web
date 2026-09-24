@@ -1,5 +1,7 @@
 # selkies.io
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/selkies-project/selkies-web)
+
 The landing page for [Selkies](https://github.com/selkies-project/selkies), the open-source,
 GPU-accelerated platform that streams Linux desktops and applications to any web browser.
 
