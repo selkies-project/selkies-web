@@ -35,6 +35,10 @@ site files into `public/` and publishes them. The custom domain is a repository 
 
 `npm run build` produces the same `public/` directory locally.
 
+The page's fonts (Sora, Inter, and JetBrains Mono) are served from `fonts/`, with the files and
+subsets Google Fonts serves and each family's SIL Open Font License beside them, so a visit
+reaches no third party for them.
+
 ## Reference clones
 
 The directories listed in `.gitignore` (`selkies/`, `pixelflux/`, `pcmflux/`, `sealskin/`,
