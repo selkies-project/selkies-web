@@ -28,7 +28,7 @@ jobs:
       - name: Assemble site
         run: |
           mkdir -p public
-          cp -r index.html index.css index.js apps.js favicon.ico img fonts public/
+          cp -r index.html index.css index.js theme.js apps.js favicon.ico img fonts public/
 
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
