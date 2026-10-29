@@ -622,7 +622,9 @@ code { font-family: var(--font-mono); font-size: .9em; background: var(--glass-2
 .footer-col a { color: var(--text-2); font-size: .92rem; transition: color var(--dur), transform var(--dur); width: max-content; }
 .footer-col a:hover { color: var(--text); transform: translateX(3px); }
 .footer-bottom { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line); font-size: .78rem; color: var(--text-3); }
-.site-credits { padding-bottom: 16px; font-size: .62rem; line-height: 1.5; color: var(--text-3); }
+.footer-notice, .site-credits { font-size: .62rem; line-height: 1.5; }
+.footer-notice { align-self: center; }
+.site-credits { padding-bottom: 16px; color: var(--text-3); }
 .site-credits a { color: var(--text-3); text-decoration: underline; text-underline-offset: 2px; transition: color var(--dur); }
 .site-credits a:hover { color: var(--text-2); }
 
